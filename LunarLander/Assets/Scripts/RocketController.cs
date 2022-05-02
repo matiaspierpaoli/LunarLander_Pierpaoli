@@ -19,7 +19,7 @@ public class RocketController : MonoBehaviour
     private void Update()
     {
         float tilt = Input.GetAxis("Horizontal");
-        thrust = Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.Space);
+        thrust = Input.GetKey(KeyCode.Space);
 
         if (!Mathf.Approximately(tilt, 0f))
         {
