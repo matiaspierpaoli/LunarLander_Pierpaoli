@@ -2,34 +2,21 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
-    [SerializeField] public Camera cam;
-    [SerializeField] public Transform target;
-    [SerializeField] public float distanceToTarget = 10;
+    [SerializeField] Vector3 offset;
+    [SerializeField] float smoothingSpéed = 10f;
 
-    private Vector3 previousPosition;
+    Transform playerTransform;
 
-    private void Update()
+    private void Start()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            previousPosition = cam.ScreenToViewportPoint(Input.mousePosition);
-        }
-        else if (Input.GetMouseButton(0))
-        {
-            Vector3 newPosition = cam.ScreenToViewportPoint(Input.mousePosition);
-            Vector3 direction = previousPosition - newPosition;
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+    }
 
-            float rotationAroundYAxis = -direction.x * 180; // camera moves horizontally
-            float rotationAroundXAxis = direction.y * 180; // camera moves vertically
+    private void FixedUpdate()
+    {
+        Vector3 targetPos = playerTransform.position + offset;
 
-            cam.transform.position = target.position;
-
-            cam.transform.Rotate(new Vector3(1, 0, 0), rotationAroundXAxis);
-            cam.transform.Rotate(new Vector3(0, 1, 0), rotationAroundYAxis, Space.World);
-
-            cam.transform.Translate(new Vector3(0, 0, -distanceToTarget));
-
-            previousPosition = newPosition;
-        }
+        transform.position = Vector3.Lerp(transform.position, targetPos, Time.deltaTime * smoothingSpéed);
+        transform.LookAt(playerTransform);
     }
 }
